@@ -16,15 +16,11 @@ next you have to install requests and flask_sqlalchemy
 
 2)sign up or login if you already had
 
-![image](https://user-images.githubusercontent.com/60815706/198879333-35cb3aa1-a4f3-4359-95a9-178d1aa9467f.png)
-
 3)provide nft address (you can get it from solanart using the link on that page)
 
-![image](https://user-images.githubusercontent.com/60815706/198879389-dfc63221-6219-424a-a345-bd12079845f2.png)
 
 4)get the results
 
-![image](https://user-images.githubusercontent.com/60815706/198879400-1c4c8112-d76d-43ce-b54c-d1c6de4685b0.png)
 
 
 # example
