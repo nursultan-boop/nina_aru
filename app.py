@@ -30,7 +30,7 @@ with app.app_context():
 # Routing for your application.
 ###
 
-@app.route('/aggregator', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def form_example():    
     global logged_in
     if not logged_in:
@@ -72,7 +72,7 @@ def login():
             return render_template('sign_in_up.html',login="yes", error='Incorrect password')
         else:
             logged_in=True
-            return redirect('/aggregator')    
+            return redirect('/')    
     return render_template('sign_in_up.html',login="yes")
 
 @app.route('/signup', methods=["GET", "POST"])
