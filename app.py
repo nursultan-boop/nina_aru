@@ -14,7 +14,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] ='postgresql://jcqacewdsiuznz:55714764e4b37fd12b2c012aa9dba8692e509dbcdf291f7b07cb8778d6f008b4@ec2-52-208-164-5.eu-west-1.compute.amazonaws.com:5432/db8b8nf93k43o0'
 db.init_app(app)
 logged_in=False
-class nft(db.Model):
+class nft_info(db.Model):
     adrs = db.Column(db.String, primary_key=True)
     meta_data = db.Column(db.String, nullable=False)
 
@@ -31,14 +31,17 @@ with app.app_context():
 ###
 
 @app.route('/', methods=['GET', 'POST'])
+
 def form_example():    
     global logged_in
     if not logged_in:
         return redirect("/login")
     if request.method == 'POST':
+        if logged_in==False:
+            return redirect('/login') 
         returnValue=""
         address = request.form['address']
-        nft_obj = nft.query.filter_by(adrs=address).first()
+        nft_obj = nft_info.query.filter_by(adrs=address).first()
         if(nft_obj is None):
             url = "https://solana-gateway.moralis.io/nft/mainnet/{}/metadata".format(address)
             headers = {
@@ -46,7 +49,7 @@ def form_example():
                 "X-API-Key": "OjvXHY7ltVwY7xKG1p9HtQmLfKuRiodrazyFMLx2ZAAzECrZY7soe5LMcTTIvj8z"
             }
             returnValue = requests.get(url, headers=headers).text            
-            neft = nft(
+            neft = nft_info(
             adrs=address,
             meta_data=returnValue,
             )
@@ -54,34 +57,32 @@ def form_example():
             db.session.commit()
             return render_template('meta_data.html', meta_data=returnValue)
 
-    return render_template('nft_styles.html')
+    return render_template('nft.html')
     
     # otherwise handle the GET request   
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     global logged_in
-    logged_in=False
     error = None
     if request.method == 'POST':
-        logged_Users = Users.query.filter_by(login=request.form['username']).first()
-        logged_pass = Users.query.filter_by(pswrd=str(hash(request.form['password']))).first()
-        if logged_Users is None:
-            return render_template('sign_in_up.html',login="yes", error='No such User is registered')
-        elif logged_pass is None:
-            return render_template('sign_in_up.html',login="yes", error='Incorrect password')
+        user_login = Users.query.filter_by(login=request.form['username']).first()
+        user_pass = Users.query.filter_by(pswrd=str(hash(request.form['password']))).first()
+        if user_login is None:
+            return render_template('login_page.html', error='Need to register')
+        elif user_pass is None:
+            return render_template('login_page.html', error='Wrong password')
         else:
             logged_in=True
             return redirect('/')    
-    return render_template('sign_in_up.html',login="yes")
+    return render_template('login_page.html')
 
-@app.route('/signup', methods=["GET", "POST"])
+@app.route('/reg', methods=["GET", "POST"])
 def Users_create():
     error=None
-    logged_in=False
     if request.method == "POST":
-        logged_Users = Users.query.filter_by(login=request.form['username']).first()
-        if logged_Users is None:
+        user_login = Users.query.filter_by(login=request.form['username']).first()
+        if user_login is None:
             users = Users(
                 login=request.form['username'],
                 pswrd=str(hash(request.form['password'])),
@@ -90,8 +91,8 @@ def Users_create():
             db.session.commit()
             return redirect('/login')
         else:
-            return render_template('sign_in_up.html',error='this User already exists, go to login instead')
-    return render_template('sign_in_up.html', login=None)    
+            return render_template('reg.html',error='User already registered')
+    return render_template('reg.html')   
 
 
 
