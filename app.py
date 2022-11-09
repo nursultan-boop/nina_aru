@@ -11,7 +11,7 @@ db = SQLAlchemy()
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] ='postgresql://jcqacewdsiuznz:55714764e4b37fd12b2c012aa9dba8692e509dbcdf291f7b07cb8778d6f008b4@ec2-52-208-164-5.eu-west-1.compute.amazonaws.com:5432/db8b8nf93k43o0'
+app.config['SQLALCHEMY_DATABASE_URI'] ='postgres://jcqacewdsiuznz:55714764e4b37fd12b2c012aa9dba8692e509dbcdf291f7b07cb8778d6f008b4@ec2-52-208-164-5.eu-west-1.compute.amazonaws.com:5432/db8b8nf93k43o0'
 db.init_app(app)
 logged_in=False
 class nft(db.Model):
